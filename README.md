@@ -4,6 +4,7 @@
 ## Student Information
 **Name:** Nicholas Guevara  
 **Student ID:** 002-85-1971
+
 **Repository:** https://github.com/nguevara00/Project-4-Huffman-Decoder/
 
 ## Collaboration & Sources
