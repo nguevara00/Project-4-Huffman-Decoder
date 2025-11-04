@@ -1,9 +1,10 @@
 //Nick Guevara
 //CS 315
-//10/28/25
+//11/3/25
 //Project 4
 
 //Huffman decoder: reconstructs tree from .hdr and decodes .code into .tokens_decoded
+
 #include "utils.hpp"
 #include "HuffmanTree.hpp"
 #include <iostream>
@@ -56,12 +57,12 @@ int main(int argc, char* argv[]) {
 
     // Part 4: Read the header, build the huffman tree, write the encoded file
 
-    std::vector<std::pair<std::string, std::string>> headerPairs;
-    if (error_type status = readHeader(headerFilePath, headerPairs); status != NO_ERROR)
+    std::vector<std::pair<std::string, std::string>> headerCodePairs;
+    if (error_type status = readHeader(headerFilePath, headerCodePairs); status != NO_ERROR)
         exitOnError(status, headerFilePath.string());
 
     HuffmanTree decodingTree;
-    if (error_type status; (status = decodingTree.buildFromHeader(headerPairs)) != NO_ERROR)
+    if (error_type status; (status = decodingTree.buildFromHeader(headerCodePairs)) != NO_ERROR)
         exitOnError(status, headerFilePath.string());
     if (error_type status; (status = decodingTree.decode(encodedFilePath, decodedFilePath)) != NO_ERROR)
         exitOnError(status, decodedFilePath.string());

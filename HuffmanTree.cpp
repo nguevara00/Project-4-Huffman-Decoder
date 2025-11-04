@@ -9,17 +9,6 @@ HuffmanTree::~HuffmanTree() {
     root_ = nullptr;
 }                         
 
-
-TreeNode* HuffmanTree::copy(const TreeNode* n) const {
-    if (n == nullptr)
-        return nullptr;
-
-    TreeNode* newNode = new TreeNode(n->getWord(), n->getFrequency());
-    newNode->setLeft(copy(n->getLeft()));
-    newNode->setRight(copy(n->getRight()));
-    return newNode;
-}
-
 void HuffmanTree::destroy(TreeNode* n) noexcept {
     if (n == nullptr)
         return;
@@ -64,6 +53,8 @@ error_type HuffmanTree::buildFromHeader(const std::vector<std::pair<std::string,
     return NO_ERROR;
 }
 
+//traverses the huffman tree according to the bit sequence in the encoded file.
+//finds the encoded words at the leaf nodes and outputs them to the decoded file. 
 error_type HuffmanTree::decode(const fs::path& encodedFilePath, const fs::path& decodedFilePath) {
     std::ifstream inFile(encodedFilePath);
     if (!inFile.is_open())
