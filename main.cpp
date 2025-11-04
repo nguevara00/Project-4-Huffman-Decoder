@@ -4,18 +4,34 @@
 //Project 4
 
 //Huffman decoder: reconstructs tree from .hdr and decodes .code into .tokens_decoded
-
+#include "utils.hpp"
+#include "HuffmanTree.hpp"
 #include <iostream>
 #include <fstream>
 #include <filesystem>
 #include <string>
-
-#include "utils.hpp"
-#include "HuffmanTree.hpp"
+#include <vector>
 
 namespace fs = std::filesystem;
 
-static error_type readHeader(const fs::path& headerFile, std::vector<std::pair<std::string, std::string>>& pairs);
+static error_type readHeader(const fs::path& headerFile, std::vector<std::pair<std::string, std::string>>& pairs) {
+    std::ifstream inFile(headerFile);
+    if (!inFile.is_open())
+        return UNABLE_TO_OPEN_FILE;
+
+    char firstChar = inFile.peek();
+    if (!inFile || !std::isalpha(static_cast<unsigned char>(firstChar))) {
+        std::cerr << "Error: Header file does not start with a letter.\n";
+        return FAILED_TO_WRITE_FILE; // Using FAILED_TO_WRITE_FILE to represent invalid format 
+    }
+
+    std::string word, code;
+    while (inFile >> word >> code)
+        pairs.emplace_back(word, code);
+
+    inFile.close();
+    return NO_ERROR;
+}
 
 int main(int argc, char* argv[]) {
 
@@ -40,34 +56,15 @@ int main(int argc, char* argv[]) {
 
     // Part 4: Read the header, build the huffman tree, write the encoded file
 
-    std::vector<std::pair<std::string, std::string>> codePairs;
-    if (error_type status = readHeader(headerFilePath, codePairs); status != NO_ERROR)
+    std::vector<std::pair<std::string, std::string>> headerPairs;
+    if (error_type status = readHeader(headerFilePath, headerPairs); status != NO_ERROR)
         exitOnError(status, headerFilePath.string());
 
     HuffmanTree decodingTree;
-    if (error_type status; (status = decodingTree.buildFromHeader(codePairs)) != NO_ERROR)
+    if (error_type status; (status = decodingTree.buildFromHeader(headerPairs)) != NO_ERROR)
         exitOnError(status, headerFilePath.string());
     if (error_type status; (status = decodingTree.decode(encodedFilePath, decodedFilePath)) != NO_ERROR)
         exitOnError(status, decodedFilePath.string());
   
     return 0;
-}
-
-static error_type readHeader(const fs::path& headerFile, std::vector<std::pair<std::string, std::string>>& pairs) {
-    std::ifstream inFile(headerFile);
-    if (!inFile.is_open())
-        return UNABLE_TO_OPEN_FILE;
-
-    char firstChar = inFile.peek();
-    if (!inFile || !std::isalpha(static_cast<unsigned char>(firstChar))) {
-        std::cerr << "Error: Header file does not start with a letter.\n";
-        return FAILED_TO_WRITE_FILE; // Using FAILED_TO_WRITE_FILE to represent invalid format 
-    }
-
-    std::string word, code;
-    while (inFile >> word >> code)
-        pairs.emplace_back(word, code);
-
-    inFile.close();
-    return NO_ERROR;
 }
