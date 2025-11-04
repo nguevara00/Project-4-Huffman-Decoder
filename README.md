@@ -20,7 +20,7 @@ This project is my own work and I wrote the code myself, based on project 3.
     -  Error handling and file handling scaffolding reused from project 3.
 	
 - **Data Structures**
-    - **'Huffman Tree'** - Stores nodes that represent either a word(leaf nodes) or internal nodes. 
+    - **`Huffman Tree`** - Stores nodes that represent either a word(leaf nodes) or internal nodes. 
 	- Reconstructed from .hdr using preorder traversasl. 
     - **`TreeNode`** – Basic node structure holding a word, frequency, and left/right pointers.
 
